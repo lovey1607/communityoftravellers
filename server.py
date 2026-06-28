@@ -6,7 +6,10 @@ import json
 import subprocess
 
 PORT = int(os.environ.get('PORT', 8000))
-DB_FILE = os.path.abspath("db.json")
+if os.path.exists("/data") and os.path.isdir("/data"):
+    DB_FILE = "/data/db.json"
+else:
+    DB_FILE = os.path.abspath("db.json")
 
 def load_db():
     if os.path.exists(DB_FILE):
