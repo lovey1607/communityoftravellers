@@ -4,14 +4,28 @@ import sys
 import os
 import json
 import subprocess
+import urllib.request
+import urllib.error
 
 PORT = int(os.environ.get('PORT', 8000))
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 if os.path.exists("/data") and os.path.isdir("/data"):
     DB_FILE = "/data/db.json"
 else:
     DB_FILE = os.path.abspath("db.json")
 
 def load_db():
+    if DATABASE_URL:
+        try:
+            req = urllib.request.Request(DATABASE_URL)
+            with urllib.request.urlopen(req, timeout=5) as response:
+                data = json.loads(response.read().decode('utf-8'))
+                if data is not None:
+                    return data
+        except Exception as e:
+            print(f"Error loading from cloud database: {e}")
+
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, 'r') as f:
@@ -27,8 +41,24 @@ def load_db():
     }
 
 def save_db(db):
-    with open(DB_FILE, 'w') as f:
-        json.dump(db, f, indent=2)
+    if DATABASE_URL:
+        try:
+            req = urllib.request.Request(
+                DATABASE_URL,
+                data=json.dumps(db, indent=2).encode('utf-8'),
+                headers={'Content-Type': 'application/json'},
+                method='PUT'
+            )
+            with urllib.request.urlopen(req, timeout=5) as response:
+                pass
+        except Exception as e:
+            print(f"Error saving to cloud database: {e}")
+
+    try:
+        with open(DB_FILE, 'w') as f:
+            json.dump(db, f, indent=2)
+    except Exception as e:
+        print(f"Error saving to local file: {e}")
 
 class CustomHTTPHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
