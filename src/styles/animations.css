@@ -1,0 +1,379 @@
+/* ============================================
+   ANIMATIONS — Keyframes & Motion System
+   ============================================ */
+
+/* === Shimmer (Skeleton Loading) === */
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+/* === Float (Gentle Hover) === */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-8px) rotate(1deg); }
+    66% { transform: translateY(-4px) rotate(-1deg); }
+}
+
+/* === Glow Pulse === */
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 170, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(0, 212, 170, 0.4), 0 0 80px rgba(0, 212, 170, 0.1); }
+}
+
+@keyframes glow-pulse-amber {
+    0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.3); }
+}
+
+/* === Text Glow === */
+@keyframes text-glow {
+    0%, 100% { text-shadow: 0 0 10px rgba(0, 212, 170, 0.3); }
+    50% { text-shadow: 0 0 20px rgba(0, 212, 170, 0.5), 0 0 40px rgba(0, 212, 170, 0.2); }
+}
+
+/* === Rotate === */
+@keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+/* === Slide Entrances === */
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-left {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-right {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* === Scale === */
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scale-bounce {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* === Fade === */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Pulse === */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes pulse-dot {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* === Marquee === */
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* === Counter Spin === */
+@keyframes count-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Blob / Ambient === */
+@keyframes blob {
+    0%, 100% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+        transform: translate(10px, -10px) rotate(120deg);
+    }
+    66% {
+        border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+        transform: translate(-10px, 10px) rotate(240deg);
+    }
+}
+
+/* === Dash (for flight paths) === */
+@keyframes dash {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes dash-reverse {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 1000; }
+}
+
+/* === Wave === */
+@keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.6); }
+}
+
+/* === Heart (Wishlist) === */
+@keyframes heart-pop {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+/* === Verified Badge Shine === */
+@keyframes badge-shine {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+/* === Toast === */
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toast-out {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%) scale(0.9);
+    }
+}
+
+/* === Modal === */
+@keyframes modal-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modal-content-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* === Typing Cursor === */
+@keyframes blink-cursor {
+    0%, 50% { border-right-color: var(--color-teal); }
+    51%, 100% { border-right-color: transparent; }
+}
+
+/* === Ambient Glow Orbs === */
+@keyframes ambient-float-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, -30px) scale(1.1); }
+    50% { transform: translate(20px, -60px) scale(0.9); }
+    75% { transform: translate(-30px, -20px) scale(1.05); }
+}
+
+@keyframes ambient-float-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-40px, 20px) scale(0.9); }
+    50% { transform: translate(-20px, 50px) scale(1.1); }
+    75% { transform: translate(30px, 30px) scale(0.95); }
+}
+
+/* === Utility Animation Classes === */
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-rotate { animation: rotate-slow 20s linear infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+.animate-shimmer { animation: shimmer 1.5s linear infinite; }
+.animate-blob { animation: blob 15s ease-in-out infinite; }
+
+/* === Scroll-Triggered Animation Classes === */
+.animate-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-in-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-in-scale.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* === Stagger Delays === */
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.1s; }
+.stagger-3 { transition-delay: 0.15s; }
+.stagger-4 { transition-delay: 0.2s; }
+.stagger-5 { transition-delay: 0.25s; }
+.stagger-6 { transition-delay: 0.3s; }
+.stagger-7 { transition-delay: 0.35s; }
+.stagger-8 { transition-delay: 0.4s; }
+.stagger-9 { transition-delay: 0.45s; }
+.stagger-10 { transition-delay: 0.5s; }
+
+/* === Hover Transitions === */
+.hover-lift {
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-base);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow-teal);
+}
+
+.hover-scale {
+    transition: transform var(--transition-base);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* === Page Transitions === */
+.page-enter {
+    animation: fade-in-up 0.4s ease-out;
+}
+
+.page-exit {
+    animation: fade-in-up 0.3s ease-in reverse;
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .animate-in,
+    .animate-in-left,
+    .animate-in-right,
+    .animate-in-scale {
+        opacity: 1;
+        transform: none;
+    }
+}

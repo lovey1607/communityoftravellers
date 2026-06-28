@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Error Diagnostic Catcher -->
+    <script>
+    (function() {
+        const showError = (title, message, details) => {
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#0d1117;color:#f85149;padding:40px;font-family:monospace;z-index:999999;overflow:auto;box-sizing:border-box;';
+            div.innerHTML = `
+                <h1 style="color:#f85149;font-size:24px;margin-top:0;border-bottom:1px solid rgba(248,81,73,0.2);padding-bottom:15px;">🚨 Platform Error Detected</h1>
+                <p style="font-size:16px;"><strong>${title}:</strong> ${message}</p>
+                ${details ? `<pre style="background:rgba(255,255,255,0.05);padding:20px;border-radius:8px;white-space:pre-wrap;color:#c9d1d9;">${details}</pre>` : ''}
+                <button onclick="location.reload(true)" style="background:#58a6ff;color:#ffffff;border:none;padding:10px 20px;border-radius:6px;font-weight:bold;margin-top:20px;cursor:pointer;font-family:sans-serif;">Force Refresh Cache</button>
+            `;
+            document.body ? document.body.appendChild(div) : document.documentElement.appendChild(div);
+        };
+        window.onerror = function(msg, url, line, col, err) {
+            showError('Runtime Error', msg, `Source: ${url}\\nLine: ${line} | Col: ${col}\\n\\nStack Trace:\\n${err ? err.stack : 'N/A'}`);
+            return false;
+        };
+        window.onunhandledrejection = function(e) {
+            showError('Unhandled Promise Rejection', e.reason, `Stack Trace:\\n${e.reason && e.reason.stack ? e.reason.stack : 'N/A'}`);
+        };
+        window.addEventListener('error', function(e) {
+            if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+                showError('Asset Loading Failed', `Could not load: ${e.target.src || e.target.href}`, 'This usually happens if the server returned a 404 or had a network interruption.');
+            }
+        }, true);
+    })();
+    </script>
+    
+    <!-- Primary Meta Tags -->
+    <title>Community of Travellers — Discover Group Trips | Travel Together Smartly & Safely</title>
+    <meta name="description" content="Discover verified group trips across India and the world. Browse curated adventures, connect with trusted hosts, and travel together smartly & safely with the Community of Travellers.">
+    <meta name="keywords" content="group trips, group travel India, verified travel hosts, community travel, safe group tours, adventure trips, women-only trips, budget travel India, international group tours">
+    <meta name="author" content="Community of Travellers">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Theme -->
+    <meta name="theme-color" content="#0a0f1a">
+    <meta name="color-scheme" content="dark">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityoftravellers.com">
+    <meta property="og:title" content="Community of Travellers — Discover Group Trips">
+    <meta property="og:description" content="Discover verified group trips across India and the world. Travel together smartly & safely.">
+    <meta property="og:image" content="/public/images/og-image.jpg">
+    <meta property="og:site_name" content="Community of Travellers">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Community of Travellers — Discover Group Trips">
+    <meta name="twitter:description" content="Discover verified group trips across India and the world. Travel together smartly & safely.">
+    <meta name="twitter:image" content="/public/images/og-image.jpg">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://communityoftravellers.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/src/styles/index.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+    <link rel="stylesheet" href="/src/styles/pages.css">
+    <link rel="stylesheet" href="/src/styles/animations.css">
+    <link rel="stylesheet" href="/src/styles/responsive.css">
+
+    <!-- Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Community of Travellers",
+        "description": "India's premium group travel marketplace. Verified hosts, curated trips, smart filters, safer travel.",
+        "url": "https://communityoftravellers.com",
+        "logo": "https://communityoftravellers.com/public/images/logo.svg",
+        "sameAs": [
+            "https://instagram.com/communityoftravellers",
+            "https://twitter.com/cotravellers",
+            "https://youtube.com/communityoftravellers"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "hello@communityoftravellers.com"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="main-nav"></nav>
+    
+    <!-- Main Content / SPA Root -->
+    <main id="app" role="main"></main>
+    
+    <!-- Footer -->
+    <footer id="main-footer"></footer>
+    
+    <!-- Modals -->
+    <div id="modal-root" aria-live="polite"></div>
+    
+    <!-- Toast Notifications -->
+    <div id="toast-container" aria-live="assertive"></div>
+    
+    <!-- Mobile Bottom Nav -->
+    <nav id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+    
+    <!-- App Entry -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
