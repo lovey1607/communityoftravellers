@@ -48,7 +48,6 @@ export function renderLoginPage() {
                     <div style="display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap;">
                         <button type="button" class="btn btn-glass btn-sm" id="preset-traveler" style="padding:var(--space-1) var(--space-2);font-size:11px;">👩 Traveler</button>
                         <button type="button" class="btn btn-glass btn-sm" id="preset-host" style="padding:var(--space-1) var(--space-2);font-size:11px;">🏡 Host (Priya)</button>
-                        <button type="button" class="btn btn-glass btn-sm" id="preset-admin" style="padding:var(--space-1) var(--space-2);font-size:11px;">🛡️ Admin</button>
                     </div>
                 </div>
             </div>
@@ -73,14 +72,24 @@ export function renderLoginPage() {
     document.getElementById('preset-host')?.addEventListener('click', () => {
         loginInstantly('priya@example.com', 'demo123');
     });
-    document.getElementById('preset-admin')?.addEventListener('click', () => {
-        loginInstantly('admin@example.com', 'demo123');
-    });
 
     document.getElementById('login-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = document.getElementById('login-email')?.value;
-        const user = users.find(u => u.email === email) || users[0];
+        const email = document.getElementById('login-email')?.value?.trim()?.toLowerCase();
+        const password = document.getElementById('login-password')?.value;
+        
+        const user = users.find(u => u.email?.toLowerCase() === email);
+        if (!user) {
+            store.addToast(`Account not found for ${escapeHTML(email)}!`, 'error');
+            return;
+        }
+
+        const requiredPassword = user.password || 'demo123';
+        if (password !== requiredPassword) {
+            store.addToast(`Incorrect password!`, 'error');
+            return;
+        }
+
         store.login(user);
         store.addToast(`Welcome back, ${user.name}! 🎉`, 'success');
         window.location.hash = '#/';

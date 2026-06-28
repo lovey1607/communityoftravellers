@@ -228,7 +228,8 @@ const defaultUsers = [
   {
     id: 'user-014',
     name: 'Vikram Admin',
-    email: 'admin@example.com',
+    email: 'a@communityoftravellers.com',
+    password: 'Hanumanji@2908',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80',
     city: 'Delhi',
     state: 'Delhi',
