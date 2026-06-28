@@ -5,7 +5,7 @@ import os
 import json
 import subprocess
 
-PORT = 8000
+PORT = int(os.environ.get('PORT', 8000))
 DB_FILE = os.path.abspath("db.json")
 
 def load_db():
