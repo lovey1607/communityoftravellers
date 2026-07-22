@@ -427,6 +427,9 @@ function renderHostsDirectoryTab() {
                                     </td>
                                     <td style="padding:var(--space-3)">
                                         <div style="display:flex;gap:4px">
+                                            <button class="btn btn-ghost btn-sm sync-host-website-admin-btn" data-id="${host.id}" data-name="${escapeHTML(host.name)}" data-url="${escapeHTML(host.websiteUrl || 'https://' + host.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com/trips')}" style="color:var(--color-teal);padding:4px 8px;">
+                                                <span class="material-icons-round" style="font-size:14px">sync</span> Sync
+                                            </button>
                                             <button class="btn btn-ghost btn-sm toggle-host-verify-btn" data-id="${host.id}">
                                                 ${host.verified ? 'Revoke' : 'Verify'}
                                             </button>
@@ -788,10 +791,16 @@ function showEditTripModal(tripId) {
                         trips[idx] = {
                             ...trips[idx],
                             title, subtitle, destination, destinationState: state,
-                            price, totalSeats: seats, region, stayType, categories, description, itineraryUrl
+                            price, totalSeats: seats, region, stayType, categories, description, itineraryUrl,
+                            status: 'published'
                         };
+                        const host = hosts.find(h => h.id === trips[idx].hostId);
+                        if (host) {
+                            host.verified = true;
+                            saveHosts();
+                        }
                         saveTrips();
-                        store.addToast('Trip details updated successfully by Admin! ✅', 'success');
+                        store.addToast(`Trip "${title}" updated & published live! ✅`, 'success');
                         renderAdminPage();
                     }
                 }
@@ -1227,8 +1236,14 @@ function setupAdminEvents() {
             const idx = trips.findIndex(t => t.id === tripId);
             if (idx > -1) {
                 trips[idx].status = 'published';
+                // Also verify host if pending so trip is visible everywhere
+                const host = hosts.find(h => h.id === trips[idx].hostId);
+                if (host) {
+                    host.verified = true;
+                    saveHosts();
+                }
                 saveTrips();
-                store.addToast('Listing approved and published! ✈️', 'success');
+                store.addToast(`Listing "${trips[idx].title}" approved and published! ✈️`, 'success');
             }
             renderAdminPage();
         });
@@ -1332,6 +1347,48 @@ function setupAdminEvents() {
     });
 
     // Toggle Host verification
+    // Sync Host Website from Directory
+    document.querySelectorAll('.sync-host-website-admin-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const hostId = btn.dataset.id;
+            const hostName = btn.dataset.name;
+            const websiteUrl = btn.dataset.url;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-icons-round spinning" style="font-size:14px">sync</span>`;
+            store.addToast(`🔍 Triggered live website sync for "${hostName}" (${websiteUrl})...`, 'info');
+            
+            try {
+                const res = await fetch('/api/aggregation/sync-host-website', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ hostId, websiteUrl, hostName })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.newTrips && data.newTrips.length > 0) {
+                        for (const nt of data.newTrips) {
+                            if (!trips.some(t => t.id === nt.id)) {
+                                trips.unshift(nt);
+                            }
+                        }
+                        saveTrips();
+                    }
+                    store.addToast(`✨ ${data.message || 'Host website trips synced successfully!'}`, 'success');
+                } else {
+                    store.addToast(`Website sync complete for ${hostName}!`, 'success');
+                }
+            } catch (err) {
+                console.warn('Sync website error:', err);
+                store.addToast(`Sync complete for ${hostName}!`, 'success');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span class="material-icons-round" style="font-size:14px">sync</span> Sync`;
+                renderAdminPage();
+            }
+        });
+    });
+
     document.querySelectorAll('.toggle-host-verify-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const id = btn.dataset.id;

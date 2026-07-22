@@ -1181,3 +1181,348 @@ img {
 @media (max-width: 768px) {
     .featured-carousel-btn { display: none; }
 }
+
+/* === Dynamic Vibe Themes === */
+body.theme-sunset {
+    --color-bg-primary: #02040a !important;
+    --color-bg-secondary: #050814 !important;
+    --color-bg-tertiary: #080d20 !important;
+    --color-bg-card: rgba(8, 12, 28, 0.4) !important;
+    --color-teal: #dfb74d !important; /* Premium Gold */
+    --color-teal-light: #ffd700 !important;
+    --color-teal-dark: #b8860b !important;
+    --color-teal-glow: rgba(223, 183, 77, 0.3) !important;
+    --color-border-active: rgba(223, 183, 77, 0.45) !important;
+    --gradient-teal: linear-gradient(135deg, #dfb74d 0%, #a87f2a 100%) !important;
+}
+
+body.theme-bluewaters {
+    --color-bg-primary: #020712 !important;
+    --color-bg-secondary: #051025 !important;
+    --color-bg-tertiary: #081735 !important;
+    --color-bg-card: rgba(8, 20, 48, 0.4) !important;
+    --color-teal: #00b4d8 !important; /* Sapphire Blue */
+    --color-teal-light: #90e0ef !important;
+    --color-teal-dark: #0077b6 !important;
+    --color-teal-glow: rgba(0, 180, 216, 0.3) !important;
+    --color-border-active: rgba(0, 180, 216, 0.45) !important;
+    --gradient-teal: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%) !important;
+}
+
+body.theme-greenery {
+    --color-bg-primary: #020805 !important;
+    --color-bg-secondary: #041c10 !important;
+    --color-bg-tertiary: #072e1a !important;
+    --color-bg-card: rgba(4, 28, 16, 0.4) !important;
+    --color-teal: #10b981 !important; /* Emerald Green */
+    --color-teal-light: #34d399 !important;
+    --color-teal-dark: #047857 !important;
+    --color-teal-glow: rgba(16, 185, 129, 0.3) !important;
+    --color-border-active: rgba(16, 185, 129, 0.45) !important;
+    --gradient-teal: linear-gradient(135deg, #10b981 0%, #047857 100%) !important;
+}
+
+body.theme-cold {
+    --color-bg-primary: #040914 !important;
+    --color-bg-secondary: #0d172a !important;
+    --color-bg-tertiary: #1e293b !important;
+    --color-bg-card: rgba(30, 41, 59, 0.4) !important;
+    --color-teal: #38bdf8 !important; /* Glacier Blue */
+    --color-teal-light: #7dd3fc !important;
+    --color-teal-dark: #0284c7 !important;
+    --color-teal-glow: rgba(56, 189, 248, 0.3) !important;
+    --color-border-active: rgba(56, 189, 248, 0.45) !important;
+    --gradient-teal: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+}
+
+body.theme-desert {
+    --color-bg-primary: #080302 !important;
+    --color-bg-secondary: #1d0a04 !important;
+    --color-bg-tertiary: #2e1208 !important;
+    --color-bg-card: rgba(29, 10, 4, 0.4) !important;
+    --color-teal: #f59e0b !important; /* Warm Amber */
+    --color-teal-light: #fbbf24 !important;
+    --color-teal-dark: #b45309 !important;
+    --color-teal-glow: rgba(245, 158, 11, 0.3) !important;
+    --color-border-active: rgba(245, 158, 11, 0.45) !important;
+    --gradient-teal: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
+}
+
+/* === 3D Book Shelf — Flat Deck Style === */
+.book-shelf-wrapper {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    margin-left: -50vw !important;
+    margin-top: 20px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+}
+
+.book-shelf-title {
+    display: none !important;
+}
+
+/* Scroll container with arrow nav */
+.book-shelf-nav {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.book-shelf-grid {
+    display: flex;
+    justify-content: flex-start !important;
+    align-items: flex-end;
+    padding: 30px 80px !important; /* Space for arrows */
+    width: 100%;
+    gap: 0px !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+.book-shelf-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* Left / Right Arrow Buttons */
+.book-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 60;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 0;
+}
+.book-nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.08);
+}
+.book-nav-arrow.arrow-left {
+    left: 16px;
+}
+.book-nav-arrow.arrow-right {
+    right: 16px;
+}
+
+.book-card-3d {
+    position: relative;
+    width: 155px;
+    height: 220px;
+    margin: 0 -14px !important; /* Overlapping stack */
+    cursor: pointer;
+    transition: transform 0.35s ease, z-index 0.1s ease;
+    z-index: 5;
+    flex-shrink: 0;
+}
+
+.book-card-3d:hover {
+    z-index: 50;
+    transform: translateY(-12px); /* Simple lift — no rotation change */
+}
+
+.book-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(-4deg); /* Nearly flat — like a real bookshelf */
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    box-shadow: -4px 6px 18px rgba(0, 0, 0, 0.45);
+    border-radius: 2px 4px 4px 2px;
+}
+
+.book-card-3d:hover .book-3d {
+    transform: rotateY(0deg); /* Face-forward on hover, no 3D flip */
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    background-color: #1a2332;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px 4px 4px 2px;
+    z-index: 5;
+    transform: translateZ(6px);
+    transform-style: preserve-3d;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.book-cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.65) 100%);
+    z-index: 2;
+}
+
+.book-spine {
+    width: 12px;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotateY(-90deg) translateZ(6px);
+    transform-origin: left center;
+    z-index: 4;
+    border-radius: 2px 0 0 2px;
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.7);
+}
+
+.book-pages {
+    width: 10px;
+    height: calc(100% - 6px);
+    position: absolute;
+    top: 3px; right: 0;
+    background: #e8e6e2;
+    transform: rotateY(90deg) translateZ(137px);
+    transform-origin: right center;
+    z-index: 3;
+    box-shadow: inset 3px 0 6px rgba(0,0,0,0.15);
+    background-image: linear-gradient(90deg, #d8d6d2 0%, #f0efed 100%);
+}
+
+.book-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    background: #1a1a1a;
+    border-radius: 2px 4px 4px 2px;
+    transform: rotateY(180deg) translateZ(6px);
+    z-index: 1;
+}
+
+/* Inside Cover Stylings */
+.book-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.55) 100%);
+    z-index: 1;
+}
+
+.book-details {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 3;
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.book-title-gold {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+    margin: auto 0 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.15 !important;
+}
+
+.book-subtitle {
+    font-size: 7px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.14em !important;
+    line-height: 1.2 !important;
+}
+
+.book-author {
+    font-size: 7px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+.book-title-popup {
+    display: none !important;
+}
+
+/* === Book Deck Category Filter Pills === */
+.book-deck-filters {
+    display: flex !important;
+    gap: 12px !important;
+    justify-content: center !important;
+    margin-top: 30px !important;
+    flex-wrap: wrap !important;
+}
+
+.book-filter-pill {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 99px !important;
+    padding: 6px 16px !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    font-family: var(--font-body) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+}
+
+.book-filter-pill:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.book-filter-pill.active {
+    background: #ffffff !important;
+    border-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Faded book state when filtered out */
+.book-card-3d.faded-out {
+    opacity: 0.1 !important;
+    pointer-events: none !important;
+    filter: grayscale(1) !important;
+    transform: scale(0.9) !important;
+}
+
+/* Flight cursor for itinerary elements */
+.book-card-3d,
+.trip-card-redesign,
+.btn-explore,
+.hero-search-btn,
+.view-details-btn,
+.invite-card,
+.trip-card-v2 {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:20px'><text y='20' x='0'>✈️</text></svg>") 10 10, pointer !important;
+}

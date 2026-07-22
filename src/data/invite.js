@@ -21,11 +21,11 @@ const defaultInviteTrips = [
   },
   {
     id: 'invite-003',
-    emoji: '🎬',
-    title: 'Creator Collective',
-    description: 'Invite-only content creators retreat',
-    date: 'Mar 5-7, 2026',
-    slots: 15
+    emoji: '🎪',
+    title: 'Ziro Festival',
+    description: 'Exclusive music festival experience in Ziro Valley, Arunachal Pradesh',
+    date: 'Sep 24-27, 2026',
+    slots: 25
   }
 ];
 

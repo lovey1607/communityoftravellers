@@ -131,15 +131,15 @@ export function renderNavbar() {
                             </div>
                         </div>
                     ` : `
-                        <a href="#/trips" class="btn btn-primary btn-sm" style="border-radius:20px;padding:8px 16px;background:var(--gradient-teal);border:none;display:flex;align-items:center;gap:6px;font-weight:600;">
+                        <a href="#/trips" class="btn btn-primary btn-sm nav-start-exploring" style="border-radius:99px;padding:8px 18px;background:linear-gradient(135deg, #f59e0b 0%, #ff9f1c 100%);color:#0f172a;border:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;box-shadow:0 2px 10px rgba(245,158,11,0.25);white-space:nowrap;">
                             <span class="material-icons-round" style="font-size:16px;">near_me</span>
                             Start Exploring
                         </a>
-                        <a href="#/login" class="btn btn-ghost btn-sm" style="border-radius:20px;padding:8px 16px;color:#fff;display:flex;align-items:center;gap:6px;background:transparent;border:none;">
+                        <a href="#/login" class="btn btn-ghost btn-sm nav-login-btn" style="border-radius:99px;padding:8px 16px;color:#ffffff;display:inline-flex;align-items:center;gap:6px;background:transparent;border:none;white-space:nowrap;">
                             <span class="material-icons-round" style="font-size:16px;">login</span>
                             Login
                         </a>
-                        <a href="#/host-register" class="btn btn-outline btn-sm" style="border-radius:20px;padding:8px 16px;border:1px solid var(--color-border);display:flex;align-items:center;gap:6px;color:var(--color-text-primary);background:transparent;">
+                        <a href="#/host-register" class="btn btn-outline btn-sm nav-host-btn" style="border-radius:99px;padding:7px 16px;border:1px solid rgba(255,255,255,0.2);display:inline-flex;align-items:center;gap:6px;color:#ffffff;background:transparent;white-space:nowrap;">
                             <span class="material-icons-round" style="font-size:16px;">person_outline</span>
                             Host
                         </a>

@@ -584,7 +584,7 @@ const defaultHosts = [
     bio: 'Travel influencer mapping out remote camping locations and mountain road trips. Join for raw, unedited mountain experiences.',
     location: 'Leh',
     state: 'Ladakh',
-    verified: false,
+    verified: true,
     rating: 5.0,
     reviewCount: 0,
     tripCount: 0,

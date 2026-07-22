@@ -176,10 +176,37 @@ function setupWishlistStampListeners() {
     });
 }
 
+async function initAutoLocationDetection() {
+    try {
+        const res = await fetch('https://ipapi.co/json/');
+        if (res.ok) {
+            const data = await res.json();
+            const city = data.city || 'Gurgaon';
+            store.set('userOrigin', city);
+            if (!store.get('filters.origin')) {
+                store.set('filters.origin', city);
+            }
+        } else {
+            store.set('userOrigin', 'Gurgaon');
+            if (!store.get('filters.origin')) {
+                store.set('filters.origin', 'Gurgaon');
+            }
+        }
+    } catch (e) {
+        store.set('userOrigin', 'Gurgaon');
+        if (!store.get('filters.origin')) {
+            store.set('filters.origin', 'Gurgaon');
+        }
+    }
+}
+
 // ─── Initialize App ─────────────────────────────────────────
 function init() {
     // Initialize toast system
     initToasts();
+
+    // Auto detect user location for origin filtering
+    initAutoLocationDetection();
 
     // Start global 3D & custom effects
     initBackgroundParticles();
@@ -201,7 +228,7 @@ function init() {
     // Listen for route changes
     window.addEventListener('hashchange', handleRoute);
 
-    // Watch store role/login updates to immediately sync shell UI
+    // Watch store role/login/trips updates to immediately sync shell UI & page content
     store.on('isLoggedIn', () => {
         renderNavbar();
         renderMobileNav();
@@ -209,6 +236,9 @@ function init() {
     store.on('userRole', () => {
         renderNavbar();
         renderMobileNav();
+    });
+    store.on('tripsUpdated', () => {
+        handleRoute();
     });
 
     // Setup global toast renderer

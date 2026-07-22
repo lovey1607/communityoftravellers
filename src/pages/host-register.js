@@ -60,8 +60,12 @@ export function renderHostRegisterPage() {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="host-reg-social">Instagram @Handle / Website Link *</label>
-                        <input type="text" class="input" id="host-reg-social" placeholder="e.g. @wanderlust_priya or mountainco.com" required>
+                        <label class="form-label" for="host-reg-social">Instagram @Handle *</label>
+                        <input type="text" class="input" id="host-reg-social" placeholder="e.g. @wanderlust_priya" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="host-reg-website">Official Website URL (for Auto-Syncing Trips) 🌐</label>
+                        <input type="url" class="input" id="host-reg-website" placeholder="e.g. https://wanderlustpriya.com/trips">
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-full" style="margin-top:var(--space-3)">
                         <span class="material-icons-round" style="margin-right:8px">rocket_launch</span> Upgrade to Host Account
@@ -107,8 +111,12 @@ export function renderHostRegisterPage() {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="host-reg-social">Instagram @Handle / Website Link *</label>
-                        <input type="text" class="input" id="host-reg-social" placeholder="e.g. @wanderlust_priya or mountainco.com" required>
+                        <label class="form-label" for="host-reg-social">Instagram @Handle *</label>
+                        <input type="text" class="input" id="host-reg-social" placeholder="e.g. @wanderlust_priya" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="host-reg-website">Official Website URL (for Auto-Syncing Trips) 🌐</label>
+                        <input type="url" class="input" id="host-reg-website" placeholder="e.g. https://wanderlustpriya.com/trips">
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-full" style="margin-top:var(--space-3)">
                         <span class="material-icons-round" style="margin-right:8px">rocket_launch</span> Setup Host Account
@@ -246,9 +254,10 @@ function setupHostRegisterEvents() {
                 responseRate: 100,
                 responseTime: 'Within a few hours',
                 joinedDate: new Date().toISOString().split('T')[0],
+                websiteUrl: document.getElementById('host-reg-website')?.value?.trim() || null,
                 socialLinks: {
                     instagram: social.startsWith('@') ? social : null,
-                    website: !social.startsWith('@') ? social : null
+                    website: document.getElementById('host-reg-website')?.value?.trim() || (!social.startsWith('@') ? social : null)
                 },
                 specialties: ['Group Travel', 'Curated Adventures'],
                 languages: ['English', 'Hindi']
@@ -316,9 +325,10 @@ function setupHostRegisterEvents() {
                 responseRate: 100,
                 responseTime: 'Within a few hours',
                 joinedDate: new Date().toISOString().split('T')[0],
+                websiteUrl: document.getElementById('host-reg-website')?.value?.trim() || null,
                 socialLinks: {
                     instagram: social.startsWith('@') ? social : null,
-                    website: !social.startsWith('@') ? social : null
+                    website: document.getElementById('host-reg-website')?.value?.trim() || (!social.startsWith('@') ? social : null)
                 },
                 specialties: ['Group Travel', 'Curated Adventures'],
                 languages: ['English', 'Hindi']

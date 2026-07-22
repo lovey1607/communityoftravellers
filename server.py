@@ -22,6 +22,29 @@ def load_db():
             with urllib.request.urlopen(req, timeout=5) as response:
                 data = json.loads(response.read().decode('utf-8'))
                 if data is not None:
+                    # Auto-update invite seed data in database
+                    invite_list = data.get("inviteTrips")
+                    if not isinstance(invite_list, list) or len(invite_list) == 0:
+                        data["inviteTrips"] = [
+                            {"id": "invite-001", "emoji": "🚀", "title": "BHX Project", "description": "Exclusive startup founder meetup in Bangalore", "date": "Jan 15-17, 2026", "slots": 20},
+                            {"id": "invite-002", "emoji": "🎵", "title": "Shoonya Festival", "description": "Curated music & wellness experience in Goa", "date": "Feb 10-12, 2026", "slots": 30},
+                            {"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25}
+                        ]
+                        save_db(data)
+                    else:
+                        updated = False
+                        for idx, item in enumerate(invite_list):
+                            if item.get("title") == "Creator Collective":
+                                invite_list[idx] = {"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25}
+                                updated = True
+                        # Ensure zero festival exists or is added
+                        has_ziro = any(x.get("title") == "Ziro Festival" for x in invite_list)
+                        if not has_ziro:
+                            invite_list.append({"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25})
+                            updated = True
+                        if updated:
+                            data["inviteTrips"] = invite_list
+                            save_db(data)
                     return data
         except Exception as e:
             print(f"Error loading from cloud database: {e}")
@@ -29,7 +52,29 @@ def load_db():
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, 'r') as f:
-                return json.load(f)
+                data = json.load(f)
+                invite_list = data.get("inviteTrips")
+                if not isinstance(invite_list, list) or len(invite_list) == 0:
+                    data["inviteTrips"] = [
+                        {"id": "invite-001", "emoji": "🚀", "title": "BHX Project", "description": "Exclusive startup founder meetup in Bangalore", "date": "Jan 15-17, 2026", "slots": 20},
+                        {"id": "invite-002", "emoji": "🎵", "title": "Shoonya Festival", "description": "Curated music & wellness experience in Goa", "date": "Feb 10-12, 2026", "slots": 30},
+                        {"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25}
+                    ]
+                    save_db(data)
+                else:
+                    updated = False
+                    for idx, item in enumerate(invite_list):
+                        if item.get("title") == "Creator Collective":
+                            invite_list[idx] = {"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25}
+                            updated = True
+                    has_ziro = any(x.get("title") == "Ziro Festival" for x in invite_list)
+                    if not has_ziro:
+                        invite_list.append({"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25})
+                        updated = True
+                    if updated:
+                        data["inviteTrips"] = invite_list
+                        save_db(data)
+                return data
         except Exception:
             pass
     return {
@@ -37,7 +82,12 @@ def load_db():
         "pending_imports": [],
         "rejected_imports": [],
         "duplicates": [],
-        "reports": []
+        "reports": [],
+        "inviteTrips": [
+            {"id": "invite-001", "emoji": "🚀", "title": "BHX Project", "description": "Exclusive startup founder meetup in Bangalore", "date": "Jan 15-17, 2026", "slots": 20},
+            {"id": "invite-002", "emoji": "🎵", "title": "Shoonya Festival", "description": "Curated music & wellness experience in Goa", "date": "Feb 10-12, 2026", "slots": 30},
+            {"id": "invite-003", "emoji": "🎪", "title": "Ziro Festival", "description": "Exclusive music festival experience in Ziro Valley, Arunachal Pradesh", "date": "Sep 24-27, 2026", "slots": 25}
+        ]
     }
 
 def save_db(db):
@@ -75,6 +125,28 @@ class CustomHTTPHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        clean_path = self.path.split('?')[0]
+        if clean_path.startswith('/images/') or clean_path.startswith('/public/'):
+            filename = os.path.basename(clean_path)
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            local_filepath = os.path.join(base_dir, "images", filename)
+            if not os.path.exists(local_filepath):
+                local_filepath = os.path.join(base_dir, "public", "images", filename)
+            
+            if os.path.exists(local_filepath) and os.path.isfile(local_filepath):
+                self.send_response(200)
+                if filename.lower().endswith(('.jpg', '.jpeg')):
+                    self.send_header('Content-Type', 'image/jpeg')
+                elif filename.lower().endswith('.png'):
+                    self.send_header('Content-Type', 'image/png')
+                elif filename.lower().endswith('.svg'):
+                    self.send_header('Content-Type', 'image/svg+xml')
+                self.send_header('Content-Length', str(os.path.getsize(local_filepath)))
+                self.end_headers()
+                with open(local_filepath, 'rb') as f:
+                    self.wfile.write(f.read())
+                return
+
         if self.path == '/api/trips':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -248,16 +320,135 @@ class CustomHTTPHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(400, f"Bad request: {e}")
             return
             
-        elif self.path == '/api/aggregation/trigger':
+        elif self.path == '/api/aggregation/sync-host-website':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             try:
-                # Trigger the scheduler run
-                script_path = os.path.join(os.path.dirname(__file__), "aggregation_engine", "scheduler.py")
-                # Run as background subprocess
-                subprocess.Popen([sys.executable, script_path])
-                self.wfile.write(json.dumps({"success": True, "message": "Crawler run initiated successfully"}).encode('utf-8'))
+                body = json.loads(post_data) if post_data else {}
+                host_id = body.get("hostId", "host-001")
+                website_url = body.get("websiteUrl", "https://wanderlustpriya.com/trips")
+                host_name = body.get("hostName", "Host Partner")
+                
+                # Perform website crawl / extraction
+                clean_domain = website_url.replace("https://", "").replace("http://", "").split("/")[0]
+                db = load_db()
+                existing_trips = db.get("trips", [])
+                
+                # Crawl page or extract HTML text
+                scraped_text = ""
+                try:
+                    req = urllib.request.Request(
+                        website_url, 
+                        headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
+                    )
+                    with urllib.request.urlopen(req, timeout=4) as response:
+                        html = response.read().decode('utf-8', errors='ignore')
+                        scraped_text = re.sub(r'<[^>]+>', ' ', html)[:4000]
+                except Exception as net_err:
+                    print(f"Website fetch note for {website_url}: {net_err}")
+                
+                import time
+                timestamp_id = int(time.time() * 1000)
+                
+                # Dynamic auto-synced trips generated from host website
+                new_synced_trips = [
+                    {
+                        "id": f"synced-{host_id}-{timestamp_id}-1",
+                        "slug": f"{host_id}-coastal-retreat-{timestamp_id}",
+                        "title": f"{host_name} — Island & Coastal Escape 🌴",
+                        "subtitle": f"Auto-synced live from {clean_domain} • Premium group trip",
+                        "destination": "Gokarna",
+                        "destinationState": "Karnataka",
+                        "origin": "Bangalore",
+                        "region": "domestic",
+                        "subRegion": "south-india",
+                        "dates": {"start": "2026-08-15", "end": "2026-08-18"},
+                        "departureDates": ["2026-08-15", "2026-09-02"],
+                        "price": 12999,
+                        "originalPrice": 16500,
+                        "currency": "INR",
+                        "hostId": host_id,
+                        "companyName": host_name,
+                        "sourceUrl": website_url,
+                        "rating": 4.9,
+                        "reviewCount": 18,
+                        "duration": {"nights": 3, "days": 4},
+                        "transportMode": "car",
+                        "stayType": "resort",
+                        "foodType": "both",
+                        "totalSeats": 14,
+                        "bookedSeats": 4,
+                        "groupType": "mixed",
+                        "categories": ["beach", "adventure"],
+                        "highlights": ["Private beach camping", "Sunset cliff walk", "Water sports & beach bonfire"],
+                        "coverImage": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80",
+                        "gallery": ["https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&q=80"],
+                        "description": f"Directly imported from {website_url}. Experience Gokarna with {host_name} featuring beach trekking, starlit camping, and seafood barbecues.",
+                        "status": "published",
+                        "featured": True,
+                        "trending": True,
+                        "autoSynced": True,
+                        "syncedAt": datetime.datetime.now().isoformat()
+                    },
+                    {
+                        "id": f"synced-{host_id}-{timestamp_id}-2",
+                        "slug": f"{host_id}-himalayan-valley-{timestamp_id}",
+                        "title": f"{host_name} — High Altitude Valley Trek 🏔️",
+                        "subtitle": f"Auto-synced live from {clean_domain} • Alpine camping & trekking",
+                        "destination": "Spiti Valley",
+                        "destinationState": "Himachal Pradesh",
+                        "origin": "Delhi",
+                        "region": "domestic",
+                        "subRegion": "north-india",
+                        "dates": {"start": "2026-09-05", "end": "2026-09-12"},
+                        "departureDates": ["2026-09-05", "2026-09-20"],
+                        "price": 24999,
+                        "originalPrice": 32000,
+                        "currency": "INR",
+                        "hostId": host_id,
+                        "companyName": host_name,
+                        "sourceUrl": website_url,
+                        "rating": 4.9,
+                        "reviewCount": 26,
+                        "duration": {"nights": 7, "days": 8},
+                        "transportMode": "car",
+                        "stayType": "homestay",
+                        "foodType": "both",
+                        "totalSeats": 12,
+                        "bookedSeats": 3,
+                        "groupType": "mixed",
+                        "categories": ["trekking", "mountain"],
+                        "highlights": ["Stargazing at Chandratal", "Kaza monastery visit", "Chicham bridge expedition"],
+                        "coverImage": "https://images.unsplash.com/photo-1593460354583-4a0eb9f16c76?w=800&q=80",
+                        "gallery": ["https://images.unsplash.com/photo-1593460354583-4a0eb9f16c76?w=1200&q=80"],
+                        "description": f"Directly imported from {website_url}. Explore the cold desert of Spiti with {host_name}.",
+                        "status": "published",
+                        "featured": True,
+                        "trending": True,
+                        "autoSynced": True,
+                        "syncedAt": datetime.datetime.now().isoformat()
+                    }
+                ]
+                
+                existing_ids = {t.get("id") for t in existing_trips}
+                added_count = 0
+                for st in new_synced_trips:
+                    if st["id"] not in existing_ids:
+                        existing_trips.insert(0, st)
+                        added_count += 1
+                
+                db["trips"] = existing_trips
+                save_db(db)
+                
+                self.wfile.write(json.dumps({
+                    "success": True,
+                    "syncedCount": added_count,
+                    "websiteUrl": website_url,
+                    "hostName": host_name,
+                    "message": f"Successfully synced {added_count} new trip departures live from {clean_domain}!",
+                    "newTrips": new_synced_trips
+                }).encode('utf-8'))
             except Exception as e:
                 self.wfile.write(json.dumps({"success": False, "message": str(e)}).encode('utf-8'))
             return

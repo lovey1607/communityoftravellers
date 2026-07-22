@@ -109,7 +109,8 @@
     color: var(--color-teal);
 }
 
-.nav-cta {
+.nav-cta,
+.nav-actions {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -441,9 +442,38 @@
 }
 
 .trip-card-redesign:hover {
-    border-color: rgba(255, 90, 0, 0.4) !important;
-    box-shadow: 0 10px 30px rgba(255, 90, 0, 0.08) !important;
+    border-color: var(--color-teal) !important;
+    box-shadow: 0 10px 30px var(--color-teal-glow) !important;
     transform: translateY(-6px) !important;
+}
+
+.card-hover-explore-circle {
+    position: absolute !important;
+    pointer-events: none !important;
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 2px solid var(--color-teal) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #ffffff !important;
+    font-family: var(--font-heading) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    transform: translate(-50%, -50%) scale(0) !important;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease !important;
+    z-index: 99 !important;
+    opacity: 0 !important;
+    box-shadow: 0 0 15px var(--color-teal-glow) !important;
+}
+
+.trip-card-redesign:hover .card-hover-explore-circle {
+    transform: translate(-50%, -50%) scale(1) !important;
+    opacity: 1 !important;
 }
 
 .card-img-block {

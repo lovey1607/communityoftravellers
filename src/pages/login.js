@@ -46,8 +46,9 @@ export function renderLoginPage() {
                 <div style="margin-top:var(--space-4);padding:var(--space-3);background:rgba(255,255,255,0.03);border:1px dashed var(--color-border);border-radius:var(--radius-md);text-align:center">
                     <p style="font-size:var(--text-xs);color:var(--color-text-secondary);margin-bottom:var(--space-2)">🚀 <strong>Quick Demo Login Presets:</strong></p>
                     <div style="display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap;">
-                        <button type="button" class="btn btn-glass btn-sm" id="preset-traveler" style="padding:var(--space-1) var(--space-2);font-size:11px;">👩 Traveler</button>
+                        <button type="button" class="btn btn-glass btn-sm" id="preset-traveler" style="padding:var(--space-1) var(--space-2);font-size:11px;">👩 Traveler (Ananya)</button>
                         <button type="button" class="btn btn-glass btn-sm" id="preset-host" style="padding:var(--space-1) var(--space-2);font-size:11px;">🏡 Host (Priya)</button>
+                        <button type="button" class="btn btn-glass btn-sm" id="preset-admin" style="padding:var(--space-1) var(--space-2);font-size:11px;">👑 Admin (Vikram)</button>
                     </div>
                 </div>
             </div>
@@ -72,6 +73,9 @@ export function renderLoginPage() {
     document.getElementById('preset-host')?.addEventListener('click', () => {
         loginInstantly('priya@example.com', 'demo123');
     });
+    document.getElementById('preset-admin')?.addEventListener('click', () => {
+        loginInstantly('a@communityoftravellers.com', 'Hanumanji@2908');
+    });
 
     document.getElementById('login-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -91,8 +95,16 @@ export function renderLoginPage() {
         }
 
         store.login(user);
-        store.addToast(`Welcome back, ${user.name}! 🎉`, 'success');
-        window.location.hash = '#/';
+        if (user.role === 'admin') {
+            store.addToast(`Welcome back, Admin ${user.name}! 👑`, 'success');
+            window.location.hash = '#/admin';
+        } else if (user.role === 'host') {
+            store.addToast(`Welcome back, Host ${user.name}! 🏡`, 'success');
+            window.location.hash = '#/dashboard';
+        } else {
+            store.addToast(`Welcome back, ${user.name}! 🎉`, 'success');
+            window.location.hash = '#/profile';
+        }
     });
 
     document.getElementById('google-login')?.addEventListener('click', () => {

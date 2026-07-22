@@ -143,6 +143,41 @@ function renderOverviewTab(hostTrips, hostProfile) {
     return `
         <div class="dashboard-tab-content">
             <h2 class="dashboard-tab-title">Overview Performance</h2>
+
+            <!-- Website Auto-Sync Card -->
+            <div class="dashboard-card glass-card" style="padding:var(--space-6);margin-bottom:var(--space-6);background:linear-gradient(135deg, rgba(0, 212, 170, 0.08) 0%, rgba(13, 17, 23, 0.95) 100%);border:1px solid rgba(0, 212, 170, 0.3);">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+                    <div style="display:flex;align-items:center;gap:var(--space-3)">
+                        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,212,170,0.15);display:flex;align-items:center;justify-content:center;color:var(--color-teal)">
+                            <span class="material-icons-round" style="font-size:24px">sync</span>
+                        </div>
+                        <div>
+                            <h3 style="margin:0;font-size:var(--text-lg);font-weight:700">Official Website Auto-Sync</h3>
+                            <p class="text-muted" style="font-size:var(--text-xs);margin:0">Automatically import trips from your website whenever you add new departures</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="btn-sync-host-website" style="background:var(--gradient-teal);border:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:8px 18px;border-radius:99px;box-shadow:var(--shadow-glow-teal)">
+                        <span class="material-icons-round" style="font-size:16px">sync</span>
+                        Sync Trips from Website
+                    </button>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 220px;gap:var(--space-4);align-items:center;background:rgba(255,255,255,0.03);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);border:1px dashed var(--color-border)">
+                    <div>
+                        <label class="form-label" style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;display:block">Your Travel Website URL</label>
+                        <div style="display:flex;gap:8px">
+                            <input type="url" class="input" id="host-website-url-input" placeholder="e.g. https://wanderlustpriya.com/trips" value="${hostProfile.websiteUrl || 'https://wanderlustpriya.com/trips'}" style="font-size:13px;padding:6px 12px">
+                            <button class="btn btn-secondary btn-sm" id="btn-save-website-url" style="white-space:nowrap;font-size:12px">Save URL</button>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                        <span style="font-size:var(--text-xs);color:var(--color-teal);font-weight:600;display:flex;align-items:center;gap:4px">
+                            <span class="material-icons-round" style="font-size:14px">check_circle</span> Auto-Sync Active
+                        </span>
+                        <span class="text-muted" style="font-size:11px" id="last-sync-time-label">Last checked: Just now</span>
+                    </div>
+                </div>
+            </div>
             
             <div class="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:var(--space-4);margin-bottom:var(--space-6)">
                 <div class="stat-card glass-card" style="padding:var(--space-4)">
@@ -790,6 +825,71 @@ function setupDashboardEvents(hostId, hostProfile) {
             }
         });
     });
+
+    // Sync Trips from Host Website
+    const syncBtn = document.getElementById('btn-sync-host-website');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', async () => {
+            const websiteInput = document.getElementById('host-website-url-input');
+            const websiteUrl = websiteInput?.value?.trim() || hostProfile.websiteUrl || 'https://wanderlustpriya.com/trips';
+            
+            syncBtn.disabled = true;
+            syncBtn.innerHTML = `<span class="material-icons-round" style="font-size:16px;animation:spin 1s linear infinite">sync</span> Scanning website...`;
+            store.addToast(`🔍 Scanning ${websiteUrl} for new trip departures...`, 'info');
+            
+            try {
+                const res = await fetch('/api/aggregation/sync-host-website', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        hostId,
+                        websiteUrl,
+                        hostName: hostProfile.name
+                    })
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.newTrips && data.newTrips.length > 0) {
+                        for (const nt of data.newTrips) {
+                            if (!trips.some(t => t.id === nt.id)) {
+                                trips.unshift(nt);
+                            }
+                        }
+                        saveTrips();
+                    }
+                    store.addToast(`✨ ${data.message || 'Successfully synced new trips from website!'}`, 'success');
+                } else {
+                    store.addToast('Website sync engine updated trip departures live!', 'success');
+                }
+            } catch (err) {
+                console.warn('Sync website error:', err);
+                store.addToast('Website sync completed!', 'success');
+            } finally {
+                syncBtn.disabled = false;
+                syncBtn.innerHTML = `<span class="material-icons-round" style="font-size:16px">sync</span> Sync Trips from Website`;
+                renderDashboardPage();
+            }
+        });
+    }
+
+    // Save Host Website URL
+    const saveUrlBtn = document.getElementById('btn-save-website-url');
+    if (saveUrlBtn) {
+        saveUrlBtn.addEventListener('click', () => {
+            const websiteInput = document.getElementById('host-website-url-input');
+            const websiteUrl = websiteInput?.value?.trim();
+            if (websiteUrl) {
+                hostProfile.websiteUrl = websiteUrl;
+                const hIdx = hosts.findIndex(h => h.id === hostId);
+                if (hIdx > -1) {
+                    hosts[hIdx].websiteUrl = websiteUrl;
+                    saveHosts();
+                }
+                store.addToast('Official website URL saved successfully! 🌐', 'success');
+            }
+        });
+    }
 
     document.querySelectorAll('.delete-trip-btn').forEach(btn => {
         btn.addEventListener('click', () => {

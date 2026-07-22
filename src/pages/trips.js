@@ -217,9 +217,7 @@ function handleFilterChange() {
 }
 
 function renderFilteredTrips() {
-    const filters = store.get('filters');
-    const verifiedHostsSet = new Set(hosts.filter(h => h.verified).map(h => h.id));
-    const publishedTrips = trips.filter(t => t.status === 'published' && verifiedHostsSet.has(t.hostId));
+    const publishedTrips = trips.filter(t => t.status === 'published');
     let filtered = applyFilters(publishedTrips, filters, hosts);
     filtered = sortTrips(filtered, filters.sortBy);
     return renderTripGrid(filtered, hosts);
@@ -229,8 +227,7 @@ function updateResultsCount() {
     const display = document.getElementById('results-count-display');
     if (!display) return;
     const filters = store.get('filters');
-    const verifiedHostsSet = new Set(hosts.filter(h => h.verified).map(h => h.id));
-    const publishedTrips = trips.filter(t => t.status === 'published' && verifiedHostsSet.has(t.hostId));
+    const publishedTrips = trips.filter(t => t.status === 'published');
     const filtered = applyFilters(publishedTrips, filters, hosts);
     display.textContent = `Showing ${filtered.length} trip${filtered.length !== 1 ? 's' : ''}`;
 }

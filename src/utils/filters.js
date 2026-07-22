@@ -70,19 +70,29 @@ export function filterTrips(trips, filters = {}, hosts = []) {
   // ── Destination ──────────────────────────────────────────
   if (filters.destination) {
     const dest = filters.destination.toLowerCase().trim();
-    result = result.filter((trip) =>
-      (trip.destination || trip.location || '').toLowerCase().includes(dest)
-    );
+    result = result.filter((trip) => {
+      const d = (trip.destination || trip.location || '').toLowerCase();
+      const s = (trip.destinationState || '').toLowerCase();
+      const t = (trip.title || '').toLowerCase();
+      const sub = (trip.subtitle || '').toLowerCase();
+      return d.includes(dest) || (d && dest.includes(d)) || s.includes(dest) || t.includes(dest) || sub.includes(dest);
+    });
   }
 
   // ── Origin / Departure City ──────────────────────────────
   if (filters.origin) {
     const orig = filters.origin.toLowerCase().trim();
+    const isNCR = ['gurgaon', 'gurugram', 'delhi', 'ncr', 'noida'].some(c => orig.includes(c));
     result = result.filter((trip) => {
       const origins = Array.isArray(trip.departureCities)
         ? trip.departureCities
         : [trip.origin || trip.departureCity || ''];
-      return origins.some((o) => o.toLowerCase().includes(orig));
+      return origins.some((o) => {
+        const lowerO = (o || '').toLowerCase();
+        if (lowerO.includes(orig)) return true;
+        if (isNCR && ['delhi', 'gurgaon', 'gurugram', 'ncr', 'noida'].some(c => lowerO.includes(c))) return true;
+        return false;
+      });
     });
   }
 

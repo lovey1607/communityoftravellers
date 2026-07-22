@@ -241,7 +241,7 @@ export function renderSearchFilters(options = {}) {
                     <div class="search-col-label">From Where</div>
                     <div class="search-input-container">
                         <span class="material-icons-round" style="color:var(--color-teal);font-size:18px;">near_me</span>
-                        <input type="text" id="filter-origin" placeholder="Your city..." value="${filters.origin || ''}">
+                        <input type="text" id="filter-origin" placeholder="Your city (e.g. Gurgaon)..." value="${filters.origin || store.get('userOrigin') || 'Gurgaon'}">
                     </div>
                 </div>
 
